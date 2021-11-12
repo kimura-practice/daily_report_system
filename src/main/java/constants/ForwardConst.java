@@ -60,19 +60,4 @@ public enum ForwardConst {
         return this.text;
     }
 
-    /**
-     * 値(文字列)から、該当する定数を返却する
-     * (例: "Report"→ForwardConst.ACT_REP)
-     * @param 値(文字列)
-     * @return ForwardConst型定数
-     */
-    public static ForwardConst get(String key) {
-        for(ForwardConst c : values()) {
-            if(c.getValue().equals(key)) {
-                return c;
-            }
-        }
-        return CMD_NONE;
-    }
-
 }
