@@ -12,7 +12,7 @@ import constants.PropertyConst;
 import services.EmployeeService;
 
 /**
- * 認証に関する処理を行うActionクラス
+ * 認証(auth)に関する処理を行うActionクラス
  *
  */
 public class AuthAction extends ActionBase {
