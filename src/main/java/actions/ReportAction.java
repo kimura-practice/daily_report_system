@@ -161,6 +161,7 @@ public class ReportAction extends ActionBase {
 
             //詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);
+            
         }
     }
 

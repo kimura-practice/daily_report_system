@@ -40,6 +40,7 @@
             </tbody>
         </table>
 
+        <%--お気に入りボタン --%>
         <input type="image" name="favorite" src="<c:url value='/images/fav_true.png' /> ">
 
         <c:if test="${sessionScope.login_employee.id == report.employee.id}">
