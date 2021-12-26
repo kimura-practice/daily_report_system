@@ -29,6 +29,9 @@ public interface JpaConst {
     int EMP_DEL_TRUE = 1; //削除フラグON(削除済み)
     int EMP_DEL_FALSE = 0; //削除フラグOFF(現役)
 
+    int FAV_DEL_TRUE = 1;//削除フラグ(削除済み)
+    int FAV_DEL_FALSE = 0;//削除フラグOFF(現役)
+
     //日報テーブル
     String TABLE_REP = "reports"; //テーブル名
 
@@ -37,6 +40,7 @@ public interface JpaConst {
     String REP_COL_EMP = "employee_id"; //日報を作成した従業員のid
     String REP_COL_REP_DATE = "report_date"; //いつの日報かを示す日付
     String REP_COL_TITLE = "title"; //日報のタイトル
+    String REP_COL_CLIENT="client";//取引先名
     String REP_COL_CONTENT = "content"; //日報の内容
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
@@ -45,21 +49,22 @@ public interface JpaConst {
     String TABLE_FAV = "favorites";//テーブル名
 
     //お気に入りテーブルカラム
-    String FAV_COL_ID = "id";//id
+    String FAV_COL_ID = "f_id";//id
     String FAV_COL_EMP = "employee_id";//お気に入りを登録した従業員のid
     String FAV_COL_REP = "report_id";//お気に入りに登録したレポートのid
-
-    int FAV_ON = 1;//お気に入りON
-    int FAV_OFF = 0;//お気に入りOFF
+    String FAV_COL_DELETE_FLAG = "delete_flag"; //削除フラグ
 
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
+    String ENTITY_FAV = "favorite";//お気に入り
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
+
+    String JPQL_PARM_REP = "report";
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -93,5 +98,16 @@ public interface JpaConst {
     //指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+
+    /**
+     * お気に入りテーブル操作
+     */
+    //指定した従業員が作成したお気に入りを全件idの降順で取得する
+    String Q_FAV_GET_ALL_MINE = ENTITY_FAV + ".getAllMine";
+    String Q_FAV_GET_ALL_MINE_DEF = "SELECT f FROM Favorite AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY f.f_id DESC";
+
+    //従業員とレポートidを条件に未削除のお気に入りを取得する
+    String Q_FAV_GET_BY_EMP_AND_REP = ENTITY_FAV + ".getByEmpAndRep";
+    String Q_FAV_GET_BY_EMP_AND_REP_DEF = "SELECT f FROM Favorite AS f WHERE f.deleteFlag = 0 AND f.employee = :" + JPQL_PARM_EMPLOYEE + " AND f.report = :" + JPQL_PARM_REP;
 
 }

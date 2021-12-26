@@ -39,6 +39,11 @@ public class ReportView {
     private String title;
 
     /**
+     * 取引先名
+     */
+    private String client;
+
+    /**
      * 日報の内容
      */
     private String content;
@@ -52,4 +57,5 @@ public class ReportView {
      * 更新日時
      */
     private LocalDateTime updatedAt;
+
 }

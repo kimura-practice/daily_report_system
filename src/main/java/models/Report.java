@@ -76,6 +76,12 @@ public class Report {
     private String title;
 
     /**
+     * 取引先
+     */
+    @Column(name = JpaConst.REP_COL_CLIENT, length = 255, nullable = false)
+    private String client;
+
+    /**
      * 日報の内容
      */
     @Lob

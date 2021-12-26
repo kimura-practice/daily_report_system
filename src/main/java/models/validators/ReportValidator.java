@@ -25,6 +25,12 @@ public class ReportValidator {
             errors.add(titleError);
         }
 
+        //取引先名のチェック
+        String clientError = validateTitle(rv.getTitle());
+        if (!clientError.equals("")) {
+            errors.add(clientError);
+        }
+
         //内容のチェック
         String contentError = validateContent(rv.getContent());
         if (!contentError.equals("")) {
@@ -42,6 +48,20 @@ public class ReportValidator {
     private static String validateTitle(String title) {
         if (title == null || title.equals("")) {
             return MessageConst.E_NOTITLE.getMessage();
+        }
+
+        //入力値がある場合は空文字を返却
+        return "";
+    }
+
+    /**
+     * タイトルに入力値があるかをチェックし、入力値がなければエラーメッセージを返却
+     * @param title タイトル
+     * @return エラーメッセージ
+     */
+    private static String validateClient(String client) {
+        if (client == null || client.equals("")) {
+            return MessageConst.E_NOCLIENT.getMessage();
         }
 
         //入力値がある場合は空文字を返却

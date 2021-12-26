@@ -14,7 +14,7 @@ public class FavoriteView {
     /**
      * id
      */
-    private Integer id;
+    private Integer f_id;
 
     /**
      * お気に入りを登録した従業員
@@ -22,7 +22,12 @@ public class FavoriteView {
     private EmployeeView employee;
 
     /**
-     * お気に入りに登録した日報
+     * お気に入りに登録したレポート
      */
     private ReportView report;
+
+    /**
+     * お気に入りの削除フラグ
+     */
+    private Integer deleteFlag;
 }

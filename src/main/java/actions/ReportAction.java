@@ -7,11 +7,13 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.FavoriteView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.FavoriteService;
 import services.ReportService;
 
 /**
@@ -21,6 +23,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private FavoriteService fs;
 
     /**
      * メソッドを実行する
@@ -29,10 +32,12 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        fs = new FavoriteService();
 
         //メソッドを実行
         invoke();
         service.close();
+        fs.close();
     }
 
     /**
@@ -112,6 +117,7 @@ public class ReportAction extends ActionBase {
                     ev, //ログインしている従業員を、日報作成者として登録する
                     day,
                     getRequestParam(AttributeConst.REP_TITLE),
+                    getRequestParam(AttributeConst.REP_CLIENT),
                     getRequestParam(AttributeConst.REP_CONTENT),
                     null,
                     null);
@@ -148,8 +154,14 @@ public class ReportAction extends ActionBase {
      */
     public void show() throws ServletException, IOException {
 
+        putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+
+        //従業員データ
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        //idを条件にお気に入りデータを取得
+        FavoriteView fv = fs.findOne(ev,rv);
 
         if (rv == null) {
             //該当の日報データが存在しない場合はエラー画面を表示
@@ -158,11 +170,13 @@ public class ReportAction extends ActionBase {
         } else {
 
             putRequestScope(AttributeConst.REPORT, rv); //取得した日報データ
+            putRequestScope(AttributeConst.FAVORITE, fv);
 
             //詳細画面を表示
             forward(ForwardConst.FW_REP_SHOW);
-            
         }
+
+
     }
 
     /**
@@ -210,6 +224,7 @@ public class ReportAction extends ActionBase {
             //入力された日報内容を設定する
             rv.setReportDate(toLocalDate(getRequestParam(AttributeConst.REP_DATE)));
             rv.setTitle(getRequestParam(AttributeConst.REP_TITLE));
+            rv.setClient(getRequestParam(AttributeConst.REP_CLIENT));
             rv.setContent(getRequestParam(AttributeConst.REP_CONTENT));
 
             //日報データを更新する
@@ -236,5 +251,7 @@ public class ReportAction extends ActionBase {
             }
         }
     }
+
+
 
 }

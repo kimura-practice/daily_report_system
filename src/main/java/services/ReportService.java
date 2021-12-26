@@ -97,6 +97,7 @@ public class ReportService extends ServiceBase {
         return errors;
     }
 
+
     /**
      * 画面から入力された日報の登録内容を元に、日報データを更新する
      * @param rv 日報の更新内容

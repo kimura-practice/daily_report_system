@@ -2,10 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.ForwardConst" %>
+<%@ page import="constants.AttributeConst" %>
 
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actFav" value="${ForwardConst.ACT_FAV.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commCre" value="${ForwardConst.CMD_CREATE.getValue()}" />
+<c:set var="commDes" value="${ForwardConst.CMD_DESTROY.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -24,6 +28,10 @@
                     <td><fmt:formatDate value='${reportDay}' pattern='yyyy-MM-dd' /></td>
                 </tr>
                 <tr>
+                    <th>取引先</th>
+                    <td><pre><c:out value="${report.client}" /></pre></td>
+                </tr>
+                <tr>
                     <th>内容</th>
                     <td><pre><c:out value="${report.content}" /></pre></td>
                 </tr>
@@ -40,8 +48,25 @@
             </tbody>
         </table>
 
-        <%--お気に入りボタン --%>
-        <input type="image" name="favorite" src="<c:url value='/images/fav_true.png' /> ">
+        <%--お気に入りボタン--%>
+        <c:choose>
+            <c:when test="${favorite == null || favorite.deleteFlag == AttributeConst.F_DEL_FLAG_TRUE.getIntegerValue()}">
+                <form method="POST" action="<c:url value='?action=${actFav}&command=${commCre}' />">
+                    <input type="image" name="" src="<c:url value='/images/fav_false.png' /> ">
+                    <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                    <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                </form>
+            </c:when>
+            <c:otherwise>
+                <form method="POST" action="<c:url value='?action=${actFav}&command=${commDes}' />">
+                    <c:out value="▼" />
+                    <input type="image" name="" src="<c:url value='/images/fav_true.png' /> ">
+                    <input type="hidden" name="${AttributeConst.REP_ID.getValue()}" value="${report.id}" />
+                    <input type="hidden" name="${AttributeConst.FAV_ID.getValue()}" value="${favorite.f_id}" />
+                    <input type="hidden" name="${AttributeConst.TOKEN.getValue()}" value="${_token}" />
+                </form>
+            </c:otherwise>
+        </c:choose>
 
         <c:if test="${sessionScope.login_employee.id == report.employee.id}">
             <p>
